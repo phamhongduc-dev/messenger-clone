@@ -7,7 +7,7 @@ export default async function UsersLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const users = getUsers();
+  const users = await getUsers();
   return (
     // @ts-expect-error Sever Comopnents
     <Sidebar>

@@ -2,8 +2,9 @@
 
 import { User } from "@prisma/client";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import Avatar from "../components/avatar/Avatar";
 
 interface UserBoxProps {
   data: User;
@@ -24,6 +25,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
   }, [data, router]);
   return (
     <div
+      onClick={handleClick}
       className="
          w-full 
          relative 
@@ -38,7 +40,14 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
          cursor-pointer
       "
     >
-      User
+      <Avatar user={data} />
+      <div className=" min-w-0 flex-1">
+        <div className=" focus:outline-none">
+          <div className=" flex justify-between items-center mb-1">
+            <p className=" text-sm font-medium text-gray-900">{data.name}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
