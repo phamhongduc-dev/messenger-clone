@@ -1,4 +1,4 @@
-import Sidebar from "../(site)/components/sidebar/Sidebar";
+import Sidebar from "../components/sidebar/Sidebar";
 import getUsers from "../actions/getUsers";
 import UserList from "./UserList";
 

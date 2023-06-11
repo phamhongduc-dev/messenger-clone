@@ -42,7 +42,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
         justify-between
         "
       >
-        <ul role="list" className="flex flex-col flex-center space-y-1">
+        <ul role="list" className="flex flex-col items-center space-y-1">
           {routes.map((item) => (
             <DesktopItem
               key={item.label}
