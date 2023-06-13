@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/app/components/avatar/Avatar";
+import AvatarGroup from "@/app/components/avatar/AvatarGroup";
 import useOrtherUser from "@/app/hooks/useOrtherUser";
 import { FullConversationType } from "@/app/types";
 import clsx from "clsx";
@@ -77,7 +78,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
         selected ? "bg-neutral-100" : "bg-white"
       )}
     >
-      <Avatar user={ortherUser} />
+      {data.isGroup ? (
+        <AvatarGroup users={data.users} />
+      ) : (
+        <Avatar user={ortherUser} />
+      )}
       <div
         className="
         min-w-0
