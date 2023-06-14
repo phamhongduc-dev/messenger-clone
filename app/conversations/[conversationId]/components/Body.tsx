@@ -5,6 +5,8 @@ import { FullMessageType } from "@/app/types";
 import React, { useState, useRef, useEffect } from "react";
 import MessageBox from "./MessageBox";
 import axios from "axios";
+import { pusherClient } from "@/app/libs/pusher";
+import { find } from "lodash";
 
 interface BodyProps {
   initialMessage: FullMessageType[];
@@ -17,6 +19,41 @@ const Body: React.FC<BodyProps> = ({ initialMessage }) => {
 
   useEffect(() => {
     axios.post(`/api/conversations/${conversationId}/seen`);
+  }, [conversationId]);
+
+  useEffect(() => {
+    pusherClient.subscribe(conversationId);
+    bottomRef?.current?.scrollIntoView();
+
+    const messageHandler = (message: FullMessageType) => {
+      setMessages((current) => {
+        if (find(current, { id: message.id })) {
+          return current;
+        }
+        return [...current, message];
+      });
+    };
+
+    const updateMessageHandle = (newMessage: FullMessageType) => {
+      setMessages((current) =>
+        current.map((currentMessage) => {
+          if (currentMessage.id === newMessage.id) {
+            return newMessage;
+          }
+
+          return currentMessage;
+        })
+      );
+    };
+
+    pusherClient.bind("message:new", messageHandler);
+    pusherClient.bind("message:update", updateMessageHandle);
+
+    return () => {
+      pusherClient.unsubscribe(conversationId);
+      pusherClient.unbind("message:new", messageHandler);
+      pusherClient.unbind("message:update", updateMessageHandle);
+    };
   }, [conversationId]);
 
   return (

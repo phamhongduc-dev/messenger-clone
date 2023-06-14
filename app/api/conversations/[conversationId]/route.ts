@@ -1,4 +1,5 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import { pusherServer } from "@/app/libs/pusher";
 import { NextResponse } from "next/server";
 
 interface IParams {
@@ -33,6 +34,12 @@ export async function DELETE(request: Request, { params }: { params: IParams }) 
                 userIds: {
                     hasSome: [currentUser.id]
                 }
+            }
+        })
+
+        existingConversation.users.forEach(user => {
+            if (user.email) {
+                pusherServer.trigger(user.email, "conversation:remove", existingConversation)
             }
         })
 
